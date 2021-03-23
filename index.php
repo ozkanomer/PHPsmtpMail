@@ -2,7 +2,12 @@
     if(isset($_POST["btn-send"])){
         require 'phpmailer/PHPMailerAutoload.php';
         $mail = new PHPMailer(); /* Create a PHPMailer instance */
-
+        
+        $UName = $_POST['UName'];
+        $Email = $_POST['Email'];
+        $Subject = $_POST['Sbuject'];
+        $Msg = $_POST['msg'];
+        
         $mail->IsSMTP();
         $mail->SMTPSecure = 'ssl'; // tsl or ssl suggest
         $mail->Host = 'smtp.exapmle.com'; // SMTP Server
@@ -20,12 +25,17 @@
         $mail->Subject= 'Form Submission: '.$_POST['Subject'];
         $mail->Body= '<h1 align=center>Name :'.$_POST['UName'].'<br>Message: '.$_POST['msg'].'</h1>';
 
-        if(!$mail->send()){
-            header('location:contact.php?error'); // Error
+        if(empty($UName) || empty($Email) || empty($Subject) || empty($Msg)){
+            header('location:contact.php?error');
         }
         else{
-            header('location:contact.php?succes'); // Succes
-        }
+            if(!$mail->send()){
+                header('location:contact.php?error');
+            }
+            else{
+                header('location:contact.php?succes');
+            }
+        } 
     }
 ?>
 
